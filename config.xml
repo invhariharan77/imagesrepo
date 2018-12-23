@@ -1,0 +1,156 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<domain xmlns="http://xmlns.oracle.com/weblogic/domain" xmlns:sec="http://xmlns.oracle.com/weblogic/security" xmlns:wls="http://xmlns.oracle.com/weblogic/security/wls" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.oracle.com/weblogic/security/xacml http://xmlns.oracle.com/weblogic/security/xacml/1.0/xacml.xsd http://xmlns.oracle.com/weblogic/security/providers/passwordvalidator http://xmlns.oracle.com/weblogic/security/providers/passwordvalidator/1.0/passwordvalidator.xsd http://xmlns.oracle.com/weblogic/domain http://xmlns.oracle.com/weblogic/1.0/domain.xsd http://xmlns.oracle.com/weblogic/security http://xmlns.oracle.com/weblogic/1.0/security.xsd http://xmlns.oracle.com/weblogic/security/wls http://xmlns.oracle.com/weblogic/security/wls/1.0/wls.xsd">
+  <name>test-1213</name>
+  <domain-version>12.1.3.0.0</domain-version>
+  <security-configuration>
+    <name>test-1213</name>
+    <realm>
+      <sec:auditor xsi:type="wls:default-auditorType">
+        <sec:name>HIG_AUDIT_PROVIDER</sec:name>
+      </sec:auditor>
+      <sec:authentication-provider xsi:type="wls:default-authenticatorType">
+        <sec:name>DefaultAuthenticator</sec:name>
+        <sec:control-flag>SUFFICIENT</sec:control-flag>
+      </sec:authentication-provider>
+      <sec:authentication-provider xsi:type="wls:default-identity-asserterType">
+        <sec:name>DefaultIdentityAsserter</sec:name>
+        <sec:active-type>AuthenticatedUser</sec:active-type>
+      </sec:authentication-provider>
+      <sec:authentication-provider xsi:type="wls:active-directory-authenticatorType">
+        <sec:name>WLADMIN_AD1Authenticator</sec:name>
+        <sec:control-flag>SUFFICIENT</sec:control-flag>
+        <wls:host>ad1.prod</wls:host>
+        <wls:port>636</wls:port>
+        <wls:user-object-class>user</wls:user-object-class>
+        <wls:ssl-enabled>true</wls:ssl-enabled>
+        <wls:user-name-attribute>sAMAccountName</wls:user-name-attribute>
+        <wls:principal>CN=SVCWLADMIN,OU=Service-Accounts,DC=ad1,DC=prod</wls:principal>
+        <wls:user-base-dn>DC=ad1,DC=prod</wls:user-base-dn>
+        <wls:credential-encrypted>{AES}aDFiCJGmuPuK06i5sJFit5P9utLktJS1f0L3uWLZYvY=</wls:credential-encrypted>
+        <wls:user-from-name-filter></wls:user-from-name-filter>
+        <wls:all-users-filter>(&amp;(objectCategory=user)(objectClass=user)(memberOf=CN=IBM_WL_ADMINS,OU=ISD,OU=Groups,DC=AD1,DC=Prod))</wls:all-users-filter>
+        <wls:group-base-dn>CN=IBM_WL_ADMINS,OU=ISD,OU=Groups,DC=AD1,DC=Prod</wls:group-base-dn>
+        <wls:group-from-name-filter>(&amp;(cn=%g)(objectclass=group))</wls:group-from-name-filter>
+        <wls:all-groups-filter>(objectclass=group)</wls:all-groups-filter>
+      </sec:authentication-provider>
+      <sec:role-mapper xmlns:xac="http://xmlns.oracle.com/weblogic/security/xacml" xsi:type="xac:xacml-role-mapperType">
+        <sec:name>XACMLRoleMapper</sec:name>
+      </sec:role-mapper>
+      <sec:authorizer xmlns:xac="http://xmlns.oracle.com/weblogic/security/xacml" xsi:type="xac:xacml-authorizerType">
+        <sec:name>XACMLAuthorizer</sec:name>
+      </sec:authorizer>
+      <sec:adjudicator xsi:type="wls:default-adjudicatorType">
+        <sec:name>DefaultAdjudicator</sec:name>
+      </sec:adjudicator>
+      <sec:credential-mapper xsi:type="wls:default-credential-mapperType">
+        <sec:name>DefaultCredentialMapper</sec:name>
+      </sec:credential-mapper>
+      <sec:cert-path-provider xsi:type="wls:web-logic-cert-path-providerType">
+        <sec:name>WebLogicCertPathProvider</sec:name>
+      </sec:cert-path-provider>
+      <sec:cert-path-builder>WebLogicCertPathProvider</sec:cert-path-builder>
+      <sec:name>myrealm</sec:name>
+      <sec:password-validator xmlns:pas="http://xmlns.oracle.com/weblogic/security/providers/passwordvalidator" xsi:type="pas:system-password-validatorType">
+        <sec:name>SystemPasswordValidator</sec:name>
+        <pas:min-password-length>8</pas:min-password-length>
+        <pas:min-numeric-or-special-characters>1</pas:min-numeric-or-special-characters>
+      </sec:password-validator>
+    </realm>
+    <default-realm>myrealm</default-realm>
+    <credential-encrypted>{AES}48px3DyCiTvypDRzPmVhbPX/BioaM8udppyJL9HuGUUheGU3EDzFqT3h4OEvi6YL/UiQrgn7d6v4g8ZfZLAUYZAjGUm2Iws4vc4QhMbbiV5BjGJSnCSJsXxw5gM8No2C</credential-encrypted>
+    <node-manager-username>4cJFDWibGP</node-manager-username>
+    <node-manager-password-encrypted>{AES}s3TxbJ0zkqGXcn71EoxRaHUZCmdDrJKm2wQWFNi8w4Y=</node-manager-password-encrypted>
+  </security-configuration>
+  <jta>
+    <security-interop-mode>default</security-interop-mode>
+  </jta>
+  <log>
+    <file-name>/tech/appl/poc9/dailylog/test-1213/test-1213.log</file-name>
+    <rotation-type>byTime</rotation-type>
+    <number-of-files-limited>true</number-of-files-limited>
+    <file-count>14</file-count>
+    <rotate-log-on-startup>false</rotate-log-on-startup>
+  </log>
+  <server>
+    <name>test-1213_admin</name>
+    <complete-message-timeout>60</complete-message-timeout>
+    <ssl>
+      <enabled>true</enabled>
+      <hostname-verifier xsi:nil="true"></hostname-verifier>
+      <hostname-verification-ignored>false</hostname-verification-ignored>
+      <client-certificate-enforced>false</client-certificate-enforced>
+      <listen-port>22201</listen-port>
+      <two-way-ssl-enabled>false</two-way-ssl-enabled>
+      <server-private-key-alias>lad1jbxhd2001.thehartford.com</server-private-key-alias>
+      <server-private-key-pass-phrase-encrypted>{AES}6vE1/TvfXWouzbjwbL8QH6+vhhKR7/r46mD3zP5Ol3w=</server-private-key-pass-phrase-encrypted>
+      <allow-unencrypted-null-cipher>false</allow-unencrypted-null-cipher>
+    </ssl>
+    <log>
+      <file-name>/tech/appl/poc9/dailylog/test-1213/test-1213_admin/test-1213_admin.log</file-name>
+      <rotation-type>byTime</rotation-type>
+      <number-of-files-limited>true</number-of-files-limited>
+      <file-count>90</file-count>
+      <rotate-log-on-startup>false</rotate-log-on-startup>
+      <logger-severity>Info</logger-severity>
+      <log-file-severity>Info</log-file-severity>
+      <stdout-severity>Info</stdout-severity>
+      <domain-log-broadcast-severity>Emergency</domain-log-broadcast-severity>
+      <memory-buffer-severity>Error</memory-buffer-severity>
+      <redirect-stdout-to-server-log-enabled>true</redirect-stdout-to-server-log-enabled>
+      <redirect-stderr-to-server-log-enabled>true</redirect-stderr-to-server-log-enabled>
+    </log>
+    <listen-port>22200</listen-port>
+    <web-server>
+      <web-server-log>
+        <file-name>/tech/appl/poc9/dailylog/test-1213/test-1213_admin/access.log</file-name>
+        <rotation-type>byTime</rotation-type>
+        <number-of-files-limited>true</number-of-files-limited>
+        <file-count>90</file-count>
+        <rotate-log-on-startup>false</rotate-log-on-startup>
+      </web-server-log>
+      <post-timeout-secs>30</post-timeout-secs>
+    </web-server>
+    <iiop-enabled>true</iiop-enabled>
+    <default-iiop-user>wlmon</default-iiop-user>
+    <default-iiop-password-encrypted>{AES}Nn8/ow8T3mksKw887jPukb4i/jBMLJ5SckHB02xSZL0=</default-iiop-password-encrypted>
+    <listen-address>lad1wlxhd2001</listen-address>
+    <upload-directory-name>/tech/appl/poc9/codebase/test-1213/upload</upload-directory-name>
+    <startup-mode>RUNNING</startup-mode>
+    <client-cert-proxy-enabled>false</client-cert-proxy-enabled>
+    <key-stores>CustomIdentityAndJavaStandardTrust</key-stores>
+    <custom-identity-key-store-file-name>/tech/appl/envctrl/WLAdminKeyStore/lad1jbxhd2001.thehartford.com.jks</custom-identity-key-store-file-name>
+    <custom-identity-key-store-type>JKS</custom-identity-key-store-type>
+    <custom-identity-key-store-pass-phrase-encrypted>{AES}oKuUrXhw4id2HkodUWX8nur7w5Mq9TmXgLzvv3CmeWw=</custom-identity-key-store-pass-phrase-encrypted>
+    <custom-trust-key-store-file-name>a</custom-trust-key-store-file-name>
+    <custom-trust-key-store-type>JKS</custom-trust-key-store-type>
+    <custom-trust-key-store-pass-phrase-encrypted>{AES}j7Ms3hyFvijDlrFx0p6u9ESbzVVzDyRm0G33tvRiTzA=</custom-trust-key-store-pass-phrase-encrypted>
+    <java-standard-trust-key-store-pass-phrase-encrypted>{AES}1Z9K4Y8jqEeVwtKPnWEVxt7+Ykrn2+tTOw5WACr4SK8=</java-standard-trust-key-store-pass-phrase-encrypted>
+  </server>
+  <production-mode-enabled>true</production-mode-enabled>
+  <embedded-ldap>
+    <name>test-1213</name>
+    <credential-encrypted>{AES}WyrJtDMfgA2OvBWdRpZwQGnqol78VCWPPs3ARxnzLjTWWuxXQQIQii5biqyT8xgz</credential-encrypted>
+  </embedded-ldap>
+  <archive-configuration-count>5</archive-configuration-count>
+  <config-backup-enabled>true</config-backup-enabled>
+  <configuration-version>12.1.3.0.0</configuration-version>
+  <configuration-audit-type>logaudit</configuration-audit-type>
+  <app-deployment>
+    <name>HigJavaFxPrj</name>
+    <target>test-1213_admin</target>
+    <module-type>war</module-type>
+    <source-path>/tech/appl/poc9/codebase/test-1213/upload/HigJavaFxPrj.war/app/HigJavaFxPrj.war</source-path>
+    <security-dd-model>DDOnly</security-dd-model>
+    <staging-mode xsi:nil="true"></staging-mode>
+    <plan-staging-mode xsi:nil="true"></plan-staging-mode>
+    <cache-in-app-directory>false</cache-in-app-directory>
+  </app-deployment>
+  <web-app-container>
+    <x-powered-by-header-level>NONE</x-powered-by-header-level>
+    <auth-cookie-enabled>true</auth-cookie-enabled>
+  </web-app-container>
+  <admin-server-name>test-1213_admin</admin-server-name>
+  <admin-console>
+    <session-timeout>900</session-timeout>
+  </admin-console>
+</domain>
