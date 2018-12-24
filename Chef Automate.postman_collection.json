@@ -1,0 +1,371 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Chef Automate",
+		"_postman_id": "f142a86a-01d4-892f-2f6d-7bcf1edf693d",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Compliance Summary",
+			"request": {
+				"url": "https://ec2-13-59-120-137.us-east-2.compute.amazonaws.com/api/v0/compliance/reporting/stats/summary",
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-token",
+						"value": "31aNZq80XnpXefbl04iABo5Ijic=",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Compliance Trend",
+			"request": {
+				"url": "https://ec2-13-59-120-137.us-east-2.compute.amazonaws.com/api/v0/compliance/reporting/stats/trend",
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-token",
+						"value": "31aNZq80XnpXefbl04iABo5Ijic=",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"type\":\"controls\",\"interval\":86400,\"filters\":[{\"type\":\"start_time\",\"values\":[\"2018-10-19T00:00:00Z\"]},{\"type\":\"end_time\",\"values\":[\"2018-10-29T23:59:59Z\"]}]}\n"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create Node",
+			"request": {
+				"url": "https://ec2-13-59-120-137.us-east-2.compute.amazonaws.com/api/v0/nodes",
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-token",
+						"value": "31aNZq80XnpXefbl04iABo5Ijic=",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"WEB-172.31.24.34\",\n  \"target_config\": {\n    \"backend\": \"ssh\",\n    \"secrets\": [\"73c6896e-ceeb-4473-928e-817d1dc590ab\"],\n    \"port\": 22,\n    \"sudo\": true,\n    \"host\": \"172.31.24.34\"\n  },\n  \"tags\": [{\n    \"key\": \"Env\",\n    \"value\": \"ICDS\"\n  }]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Secrets Search",
+			"request": {
+				"url": "https://ec2-13-59-120-137.us-east-2.compute.amazonaws.com/api/v0/secrets/search",
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-token",
+						"value": "31aNZq80XnpXefbl04iABo5Ijic=",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"filters\": [{\n    \"key\": \"type\",\n    \"values\": [\"ssh\", \"winrm\", \"sudo\"]\n  }],\n  \"page\": 1,\n  \"per_page\": 100\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create Scan Jobs",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"postman.setEnvironmentVariable('scan_job_id', jsonData.id);",
+							"postman.setEnvironmentVariable('scan_report_id', '');"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://ec2-13-59-120-137.us-east-2.compute.amazonaws.com/api/v0/compliance/scanner/jobs",
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-token",
+						"value": "31aNZq80XnpXefbl04iABo5Ijic=",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"type\": \"exec\",\n  \"tags\": [],\n  \"name\": \"test{{$timestamp}}\",\n  \"profiles\": [\"compliance://admin/hig-jwsapache#0.1.5\"],\n  \"node_selectors\": [{\n    \"manager_id\": \"e69dc612-7e67-43f2-9b19-256afd385820\",\n    \"filters\": [{\n      \"key\": \"name\",\n      \"values\": [\"apache-18.222.141.32\"],\n      \"exclude\": false\n    }]\n  }],\n  \"recurrence\": \"\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Post to Slack",
+			"request": {
+				"url": "https://hooks.slack.com/services/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",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"text\": \"Hello, World!\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Search Node",
+			"request": {
+				"url": "https://ec2-13-59-120-137.us-east-2.compute.amazonaws.com/api/v0/nodes/search",
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-token",
+						"value": "31aNZq80XnpXefbl04iABo5Ijic=",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"filters\": [{\n    \"key\": \"name\",\n    \"values\": [\"apache-18.222.141.32\"]\n  }]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Node",
+			"request": {
+				"url": "https://ec2-13-59-120-137.us-east-2.compute.amazonaws.com/api/v0/nodes/id/ff546c82-fbda-496f-be1d-2d41886411e6",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "api-token",
+						"value": "31aNZq80XnpXefbl04iABo5Ijic=",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Scan Report",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"postman.setEnvironmentVariable('scan_report_id', jsonData.reports[0].id);",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://ec2-13-59-120-137.us-east-2.compute.amazonaws.com/api/v0/compliance/reporting/reports",
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-token",
+						"value": "31aNZq80XnpXefbl04iABo5Ijic=",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"filters\": [{\n    \"type\": \"job_id\",\n    \"values\": [\"{{scan_job_id}}\"]\n  }],\n  \"sort\": \"latest_report.end_time\",\n  \"order\": \"DESC\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Scan Status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"",
+							"tests[\"Status\"] = responseCode.status === \"success\";",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://ec2-13-59-120-137.us-east-2.compute.amazonaws.com/api/v0/compliance/reporting/reports/id/{{scan_report_id}}",
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-token",
+						"value": "31aNZq80XnpXefbl04iABo5Ijic=",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"filters\": [{\n    \"type\": \"job_id\",\n    \"values\": [\"{{scan_job_id}}\"]\n  }]\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Job",
+			"request": {
+				"url": "https://ec2-13-59-120-137.us-east-2.compute.amazonaws.com/api/v0/compliance/scanner/jobs/id/{{scan_job_id}}",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "api-token",
+						"value": "31aNZq80XnpXefbl04iABo5Ijic=",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
